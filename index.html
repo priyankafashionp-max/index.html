@@ -270,7 +270,6 @@ async function sendData(){
 
   let btn = document.querySelector(".submit");
 
-  // ✅ Duplicate check (frontend basic)
   let mobile = document.getElementById("mobile").value;
   let transaction = document.getElementById("transaction").value;
   let amount = document.getElementById("amount").value;
@@ -282,44 +281,50 @@ async function sendData(){
     return;
   }
 
-  // ✅ Submitting UI
   isSubmitting = true;
   btn.innerText = "Submitting...";
   btn.disabled = true;
 
-  await fetch(WEB_APP_URL,{
-    method:"POST",
-    headers:{
-      "Content-Type":"application/json"
-    },
-    body:JSON.stringify({
-      name: document.getElementById("name").value,
-      address: document.getElementById("address").value,
-      landmark: document.getElementById("landmark").value,
-      pincode: document.getElementById("pincode").value,
-      mobile: mobile,
-      altmobile: document.getElementById("altmobile").value,
-      transaction: transaction,
-      amount: amount
-    })
-  });
+  try{
 
-  // ✅ Save unique key
-  localStorage.setItem(uniqueKey, "saved");
+    await fetch(WEB_APP_URL,{
+      method:"POST",
+      mode:"no-cors",   // ✅ IMPORTANT FIX
+      body:JSON.stringify({
+        name: document.getElementById("name").value,
+        address: document.getElementById("address").value,
+        landmark: document.getElementById("landmark").value,
+        pincode: document.getElementById("pincode").value,
+        mobile: mobile,
+        altmobile: document.getElementById("altmobile").value,
+        transaction: transaction,
+        amount: amount
+      })
+    });
 
-  // ✅ Success Popup
-  let box = document.getElementById("successBox");
-  box.classList.add("show");
+    // ✅ Save unique key
+    localStorage.setItem(uniqueKey, "saved");
 
-  setTimeout(()=>{
-    box.classList.remove("show");
-    document.querySelectorAll("input").forEach(i=>i.value="");
+    // ✅ Success Popup
+    let box = document.getElementById("successBox");
+    box.classList.add("show");
 
+    setTimeout(()=>{
+      box.classList.remove("show");
+      document.querySelectorAll("input").forEach(i=>i.value="");
+
+      btn.innerText = "Submit";
+      btn.disabled = false;
+      isSubmitting = false;
+
+    },2000);
+
+  } catch(err){
+    alert("Error aa gaya ❌");
     btn.innerText = "Submit";
     btn.disabled = false;
     isSubmitting = false;
-
-  },2000);
+  }
 }
 </script>
 
