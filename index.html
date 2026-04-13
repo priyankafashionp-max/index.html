@@ -264,7 +264,7 @@ const WEB_APP_URL="https://script.google.com/macros/s/AKfycbxAcf-CxDt_SZfOOG8Ogb
 
 let isSubmitting = false;
 
-async function sendData(){
+function sendData(){
 
   if(isSubmitting) return;
 
@@ -285,46 +285,37 @@ async function sendData(){
   btn.innerText = "Submitting...";
   btn.disabled = true;
 
-  try{
+  // ✅ DATA
+  let payload = JSON.stringify({
+    name: document.getElementById("name").value,
+    address: document.getElementById("address").value,
+    landmark: document.getElementById("landmark").value,
+    pincode: document.getElementById("pincode").value,
+    mobile: mobile,
+    altmobile: document.getElementById("altmobile").value,
+    transaction: transaction,
+    amount: amount
+  });
 
-    await fetch(WEB_APP_URL,{
-      method:"POST",
-      mode:"no-cors",   // ✅ IMPORTANT FIX
-      body:JSON.stringify({
-        name: document.getElementById("name").value,
-        address: document.getElementById("address").value,
-        landmark: document.getElementById("landmark").value,
-        pincode: document.getElementById("pincode").value,
-        mobile: mobile,
-        altmobile: document.getElementById("altmobile").value,
-        transaction: transaction,
-        amount: amount
-      })
-    });
+  // ✅ FAST SEND
+  navigator.sendBeacon(WEB_APP_URL, payload);
 
-    // ✅ Save unique key
-    localStorage.setItem(uniqueKey, "saved");
+  // ✅ Save unique key
+  localStorage.setItem(uniqueKey, "saved");
 
-    // ✅ Success Popup
-    let box = document.getElementById("successBox");
-    box.classList.add("show");
+  // ✅ Success UI
+  let box = document.getElementById("successBox");
+  box.classList.add("show");
 
-    setTimeout(()=>{
-      box.classList.remove("show");
-      document.querySelectorAll("input").forEach(i=>i.value="");
+  setTimeout(()=>{
+    box.classList.remove("show");
+    document.querySelectorAll("input").forEach(i=>i.value="");
 
-      btn.innerText = "Submit";
-      btn.disabled = false;
-      isSubmitting = false;
-
-    },2000);
-
-  } catch(err){
-    alert("Error aa gaya ❌");
     btn.innerText = "Submit";
     btn.disabled = false;
     isSubmitting = false;
-  }
+
+  },2000);
 }
 </script>
 
