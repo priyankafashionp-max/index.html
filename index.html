@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+
+<style>
+
+*{box-sizing:border-box; margin:0; padding:0; font-family:Poppins;}
+
+body{
+  background:linear-gradient(135deg,#667eea,#764ba2);
+  padding-top:20px; /* Logo ke upar thoda space */
+}
+
+/* HEADER */
+.header{
+  position:relative;
+  width:100%;
+  text-align:center;
+  padding:10px 0;
+}
+
+/* Logo styling */
+.logo {
+  width: 300px; /* Adjust size */
+  height: auto;
+  display: inline-block;
+}
+
+/* Container */
+.container{
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  min-height:90vh;
+}
+
+/* Form Box */
+.form-box{
+  background:rgba(252, 8, 8, 0.11);
+  backdrop-filter:blur(20px);
+  padding:25px;
+  border-radius:20px;
+  width:100%;
+  max-width:350px;
+  color:white;
+  box-shadow:0 10px 40px rgba(0,0,0,0.4);
+}
+
+/* Inputs with animated underline */
+.input-wrapper {
+  position: relative;
+  margin-top:15px;
+}
+
+input{
+  width:100%;
+  padding:12px;
+  border:none;
+  border-bottom:2px solid rgba(255,255,255,0.5);
+  font-size:17px;
+  color:white;
+  outline:none;
+  background:transparent;
+  cursor:pointer;
+  transition: all 0.3s ease;
+}
+
+input::placeholder{
+  color:rgba(255,255,255,0.7);
+}
+
+/* Animated line effect */
+input:focus{
+  border-bottom:2px solid #00ffcc;
+  box-shadow: 0 2px 10px rgba(0,255,204,0.7);
+}
+#name:focus, #name:hover {
+  border-bottom: 2px solid #ff0000; /* Name input red line */
+  box-shadow: 0 2px 8px rgba(255,0,0,0.5);
+}
+
+#address:focus, #address:hover {
+  border-bottom: 2px solid #00ff00; /* Address input green line */
+  box-shadow: 0 2px 8px rgba(0,255,0,0.5);
+}
+
+#mobile:focus, #mobile:hover {
+  border-bottom: 2px solid #c8ff00; /* Mobile input blue line */
+  box-shadow: 0 2px 8px rgba(226, 204, 7, 0.801);
+}
+/* Hover effect for inputs */
+input:hover {
+  border-bottom: 2px solid #00ffcc; /* line glow on hover */
+  box-shadow: 0 2px 8px rgba(0,255,204,0.5); /* soft glow */
+}
+
+/* Optional sliding pseudo-element line */
+.input-wrapper::after{
+  content:"";
+  position:absolute;
+  left:0;
+  bottom:0;
+  height:2px;
+  width:0;
+  background:#00ffcc;
+  transition:width 0.3s ease;
+}
+
+.input-wrapper input:focus + .input-wrapper::after{
+  width:100%;
+}
+
+/* Buttons */
+button{
+  width:100%;
+  padding:14px;
+  margin-top:15px;
+  border:none;
+  border-radius:14px;
+  cursor:pointer;
+  font-weight:600;
+  transition:0.3s;
+}
+
+.submit{
+  background:linear-gradient(135deg,#00ffcc,#00c9ff,#0072ff);
+  color:black;
+}
+
+.submit:hover{
+  transform:scale(1.05);
+}
+
+/* Success Popup */
+.success-box{
+  position:fixed;
+  top:50%;
+  left:50%;
+  transform:translate(-50%,-50%) scale(0);
+  background:rgba(0,0,0,0.8);
+  color:white;
+  padding:25px 35px;
+  border-radius:20px;
+  text-align:center;
+  z-index:999;
+  transition:0.4s;
+}
+
+.success-box.show{
+  transform:translate(-50%,-50%) scale(1);
+}
+
+.tick{
+  font-size:50px;
+  color:#00ffcc;
+  margin-bottom:10px;
+}
+
+</style>
+</head>
+
+<body>
+
+<!-- LOGO HEADER -->
+<div class="header">
+  <img src="logo1.png" alt="Company Logo" class="logo">
+</div>
+
+<!-- FORM -->
+<div class="container">
+  <div class="form-box">
+
+    <div class="input-wrapper"><input id="name" placeholder="Name"></div>
+    <div class="input-wrapper"><input id="address" placeholder="Address"></div>
+    <div class="input-wrapper"><input id="landmark" placeholder="Landmark"></div>
+    <div class="input-wrapper"><input id="pincode" type="number" placeholder="Pin Code"></div>
+    <div class="input-wrapper"><input id="mobile" type="number" placeholder="Mobile Number"></div>
+    <div class="input-wrapper"><input id="altmobile" type="number" placeholder="Alternative Number"></div>
+    <div class="input-wrapper"><input id="transaction" placeholder="Transaction ID"></div>
+    <div class="input-wrapper"><input id="amount" type="number" placeholder="Amount"></div>
+
+    <button class="submit" onclick="sendData()">Submit</button>
+
+  </div>
+</div>
+
+<!-- SUCCESS BOX -->
+<div id="successBox" class="success-box">
+  <div class="tick">✔</div>
+  <p>Data Saved Successfully</p>
+</div>
+
+<script>
+
+const WEB_APP_URL="https://script.google.com/macros/s/AKfycbyBW6Sts2sL0IrcJiof1DsOtAIebtZvEHRgP9qjPBeRTz4IwWPFD8HX9N0FjBVtZtZp/exec";
+
+async function sendData(){
+  await fetch(WEB_APP_URL,{
+    method:"POST",
+    mode:"no-cors",
+    body:JSON.stringify({
+      name:name.value,
+      address:address.value,
+      landmark:landmark.value,
+      pincode:pincode.value,
+      mobile:mobile.value,
+      altmobile:altmobile.value,
+      transaction:transaction.value,
+      amount:amount.value
+    })
+  });
+
+  /* SUCCESS SHOW */
+  let box = document.getElementById("successBox");
+  box.classList.add("show");
+
+  /* RESET */
+  setTimeout(()=>{
+    box.classList.remove("show");
+    document.querySelectorAll("input").forEach(i=>i.value="");
+  },2000);
+}
+
+</script>
+
+</body>
+</html>
