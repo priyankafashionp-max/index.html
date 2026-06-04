@@ -199,6 +199,11 @@ button{
   <label>Amount</label>
 </div>
 
+  <div class="input-wrapper full">
+  <input id="referralcode" placeholder=" ">
+  <label>Referral code</label>
+</div>
+
 <button class="submit full" onclick="sendData()">Submit</button>
 
 </div>
@@ -215,7 +220,7 @@ let isSubmitting=false;
 
 function validateForm(){
 
-  let ids=["name","mobile","address","landmark","pincode","altmobile","transaction","amount"];
+  let ids=["name","mobile","address","landmark","pincode","altmobile","transaction","amount","referralcode"];
 
   for(let id of ids){
     let el=document.getElementById(id);
@@ -254,6 +259,7 @@ function sendData(){
   let altmobileVal=document.getElementById("altmobile").value;
   let transactionVal=document.getElementById("transaction").value;
   let amountVal=document.getElementById("amount").value;
+  let referralcodeVal=document.getElementById("referralcode").value;
 
   let key=mobileVal+"_"+transactionVal+"_"+amountVal;
 
@@ -275,6 +281,7 @@ function sendData(){
     altmobile:altmobileVal,
     transaction:transactionVal,
     amount:amountVal
+    referralcode:referralcodeVal
   });
 
   navigator.sendBeacon(WEB_APP_URL,data);
